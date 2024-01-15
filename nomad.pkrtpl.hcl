@@ -11,8 +11,10 @@ client {
   server_join {
     retry_join = ["10.0.0.10"] #Change this to your nomad server
     retry_max = 3
+    
   }
 }
+
 acl {
   enabled = false
 }

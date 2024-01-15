@@ -1,3 +1,5 @@
 dev-license.hclic.tpl
 dev.auto.pkrvars.hcl
 dev-*
+*hclic*
+*auto.pkrvars.hcl*

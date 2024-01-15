@@ -44,29 +44,9 @@ nomad -autocomplete-install && complete -C /usr/bin/nomad nomad
 mv /tmp/nomad.hcl /etc/nomad.d/nomad.hcl
 mv /tmp/nomad.service /etc/systemd/system/nomad.service
 
-if [ "${CONSUL_INSTALL}" == true ]; then
-echo "Downloading and Installing Consul..."
-apt install -y consul
-mv /tmp/consul.hcl /etc/consul.d/consul.hcl
-systemctl enable consul
-echo "consul { address = \"127.0.0.1:8500\" }" | tee -a /etc/nomad.d/nomad.hcl
-fi 
-
 echo "Downloading and extracting Podman driver..."
 wget https://releases.hashicorp.com/nomad-driver-podman/0.5.1/nomad-driver-podman_0.5.1_linux_amd64.zip
 7z x nomad-driver-podman_0.5.1_linux_amd64.zip -o./
 mv ./nomad-driver-podman /opt/nomad/data/plugins
-
-
-if [ "${CREATE_NFS_MOUNT}" == true ]; then
-nfs_shares=(${MOUNT})
-for element in "${nfs_shares[@]}"
-do
-  mkdir -p $element
-  echo "Running command for: $element"
-  mount -t nfs ${NFS_SERVER}:$element $element
-  echo "${NFS_SERVER}:$element $element nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0" | tee -a /etc/fstab
-done
-fi
 
 systemctl reboot
